@@ -23,3 +23,29 @@ export async function findListingById(id) {
     console.log(listing);
     return listing;
 }
+
+export async function findAllListingsByProperty(type,page, pageSize) { //como viene la propiedadn
+    const db = getDb();
+    
+        const skip = (page - 1) * pageSize;
+        const listings = await db.collection("listingsAndReviews")
+            .find({ property_type : type})
+            .skip(skip)
+            .limit(pageSize)
+            .toArray();
+        return listings;
+    
+}
+
+export async function findListingsWithTotalPrice( page, pageSize) { 
+    const db = getDb();
+
+    const skip = (page - 1) * pageSize;
+    const listings = await db.collection("listingsAndReviews")
+        .find()
+        .skip(skip)
+        .limit(pageSize)
+        .toArray();
+    return listings;
+    
+}

@@ -1,4 +1,4 @@
-import { getListings, getListingById } from "../services/listingsService.js";
+import { getListings, getListingById, getListingsByPropertyType, getListingsWithTotalPrice } from "../services/listingsService.js";
 
 export const getAllListings = async (req, res) => {
     try {
@@ -24,3 +24,29 @@ export const getListingId = async (req, res) => {
     }
 };
 
+export const getListingsByType = async (req, res) => {
+    try {
+        const type = req.params.type;
+        const page = req.query.page ? parseInt(req.query.page) : undefined;
+        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : undefined;
+
+        const listing = await getListingsByPropertyType(type, page, pageSize);
+        res.json(listing);
+      
+    } catch (error) {
+        console.log("Error fetching listings: ", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export const getListingsTotalPrice = async (req, res) => {
+    try {
+        const page = req.query.page ? parseInt(req.query.page) : undefined;
+        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : undefined;
+        const listings = await getListingsWithTotalPrice(page, pageSize);
+        res.json(listings);
+    } catch (error) {
+        console.log("Error fetching listings: ", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
